@@ -1,0 +1,17 @@
+# Weight files
+*.pth
+*.pt
+*.ckpt
+*.npz
+
+# TMP folders 
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+temp/
+tmp/
+.cache/
+.temp/
+.output/
+
