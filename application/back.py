@@ -6,6 +6,8 @@ import json
 import time
 import asyncio
 from datetime import datetime
+from back_segmentation import run_segmentation
+from front.public.mri.slice import extract_files
 
 app = FastAPI(title="MedGemma API", description="Medical imaging and chat API")
 
@@ -45,15 +47,6 @@ class ReportResponse(BaseModel):
 last_client: str = ""
 chat_history: List[ChatMessage] = []
 
-# Mock responses for different medical scenarios
-MOCK_RESPONSES = [
-    "Based on the medical data, I can see the patient's imaging results. How can I help you analyze this case?",
-    "The MRI shows some interesting findings. Would you like me to elaborate on any specific region?",
-    "I notice there are some areas that require attention. Let me provide more details about the observations.",
-    "The segmentation analysis reveals several key points. What specific aspect would you like to discuss?",
-    "From the clinical data provided, I can offer insights about the patient's condition. What questions do you have?"
-] 
-
 @app.get("/")
 async def root():
     """Root endpoint returning API information"""
@@ -63,6 +56,7 @@ async def root():
         "endpoints": ["/seg", "/report", "/chat/start", "/chat/send"]
     }
 
+# Generate Segmentations
 @app.post("/seg", response_model=SegmentationResponse)
 async def segmentation():
     """
@@ -70,20 +64,41 @@ async def segmentation():
     Input: nothing
     Output: status confirmation
     """
-<<<<<<< Updated upstream
+    try:
+        # Run segmentation for both MRI IDs (0 and 1)
+        print("Starting segmentation process...")
+        
+        # Run segmentation for ID "0"
+        success_0 = run_segmentation("0")
+        if not success_0:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 0")
+        
+        # Run segmentation for ID "1"
+        success_1 = run_segmentation("1")
+        if not success_1:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 1")
+        
+        # Extract files after segmentation
+        print("Starting file extraction...")
+        extract_success = extract_files()
+        if not extract_success:
+            raise HTTPException(status_code=500, detail="File extraction failed")
+        
+        print("Segmentation and extraction completed successfully!")
+        
+        # Segmentation done send ok response
+        return SegmentationResponse(
+            response="Segmentation and extraction completed successfully."
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error in segmentation endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-    
 
-
-    # Segmentation done send ok response
-=======
-    # Simulate processing time
-    await asyncio.sleep(2)
->>>>>>> Stashed changes
-    return SegmentationResponse(
-        response="Ok."
-    )
-
+# Generate Info file and Report
 @app.post("/report", response_model=ReportResponse)
 async def generate_report(request: ReportRequest):
     """
@@ -153,7 +168,7 @@ async def send_chat_message(request: ChatSendRequest):
     elif "treatment" in user_input or "therapy" in user_input:
         response_content = "Based on the imaging findings, I can suggest treatment considerations. However, please remember that final treatment decisions should always involve the clinical team and patient history."
     else:
-        response_content = random.choice(MOCK_RESPONSES)
+        response_content = 'boo'
     
     assistant_message = ChatMessage(role="assistant", content=response_content)
     chat_history.append(assistant_message)
