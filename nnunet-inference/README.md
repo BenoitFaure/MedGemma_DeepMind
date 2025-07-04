@@ -204,6 +204,6 @@ MIT License
 - Google Cloud Platform for infrastructure.
 
 ##  Contact and more
-- This part of the project was completly developped by Zoughebi Mateo (PhD Student).
-- Tested by Rohit Datchanamourty on both linux and windows distribution.
-- Contact : mateo.zoughebi@telecom-sudparis.eu.
+- This part of the project was entirely developed by Mateo Zoughebi (PhD student).
+- Tested by Rohit Datchanamourty on both Linux and Windows systems.
+- For any inquiries, please contact: mateo.zoughebi@telecom-sudparis.eu.
