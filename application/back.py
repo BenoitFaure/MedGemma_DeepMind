@@ -50,7 +50,11 @@ async def segmentation():
     Input: nothing
     Output: status confirmation
     """
-    # Mock segmentation process
+
+    
+
+
+    # Segmentation done send ok response
     return SegmentationResponse(
         response="Ok."
     )
