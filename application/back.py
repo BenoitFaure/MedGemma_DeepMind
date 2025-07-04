@@ -13,6 +13,9 @@ class ChatStartRequest(BaseModel):
 class ChatSendRequest(BaseModel):
     message: str
 
+class ReportRequest(BaseModel):
+    client_name: str
+
 class ChatMessage(BaseModel):
     role: str
     content: str
@@ -53,15 +56,16 @@ async def segmentation():
     )
 
 @app.post("/report", response_model=ReportResponse)
-async def generate_report():
+async def generate_report(request: ReportRequest):
     """
     Report generation endpoint
-    Input: nothing
+    Input: client name
     Output: status confirmation
     """
-    # Mock report generation
+    client_name = request.client_name
+    # Mock report generation for client
     return ReportResponse(
-        response="Ok."
+        response=f"Report generated for client: {client_name}"
     )
 
 @app.post("/chat/start", response_model=ChatResponse)
