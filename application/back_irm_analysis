@@ -1,0 +1,54 @@
+'''
+Script to handle analysis of patient IRM and seg
+'''
+# Dependencies
+import base64
+from google.cloud import aiplatform
+
+from back_environment import PROJECT_ID, REGION, MEDGEMMA_FT_ENDPOINT_ID, MEDGEMMA_FT_ENDPOINT_REGION
+
+def run_analysis(patient_id):
+
+    # Run Gemma FineTuned on all images
+    #          Images in seg are supposed to be pre-processed to already have the segmentations applied
+
+    # INIT PLATFORM AND ENDPOINT
+    aiplatform.init(project=PROJECT_ID, location=REGION)
+
+    endpoints["endpoint"] = aiplatform.Endpoint(
+        endpoint_name=ENDPOINT_ID,
+        project=PROJECT_ID,
+        location=ENDPOINT_REGION,
+    )
+
+    
+    # Prompt 
+    system_instruction = "You are an expert radiologist."
+    prompt = "Describe this IRM"
+    file_name = "Untitled.png"
+
+
+    formatted_prompt = f"{system_instruction} {prompt} <start_of_image>"
+
+    with open(file_name, "rb") as image_file:
+        img_b64 = base64.b64encode(image_file.read()).decode()
+
+    # Instance and Message
+    instances = [
+        {
+            "prompt": formatted_prompt,
+            "multi_modal_data": {"image": f'data:image/png;base64,{img_b64}' },
+            "max_tokens": 500,
+            "temperature": 0,
+            "raw_response": False,
+        },
+    ]
+
+    # Run Inference
+    response = endpoints["endpoint"].predict(
+        instances=instances, use_dedicated_endpoint=use_dedicated_endpoint
+    )
+
+
+    # Display
+    prediction = response.predictions[0]
