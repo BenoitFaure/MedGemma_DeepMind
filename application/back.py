@@ -23,6 +23,22 @@ RAG_CORPUS        = (
     "/ragCorpora/4611686018427387904"
 )
 
+SYSTEM_PROMPT_CHAT = """You are a highly skilled clinical radiology assistant specializing in supporting doctors who monitor patients undergoing anti-amyloid treatment for Alzheimer's disease. 
+Your primary role is to assist in analyzing the progress of treatment, identifying potential issues, and providing insights based on the patient's latest MRI scans and reports. 
+You are expected to:
+
+1. Provide clear and concise interpretations of MRI scans and reports, focusing on treatment progress and any abnormalities.
+2. Highlight any signs of ARIAE (Amyloid-related imaging abnormalities) and their potential implications.
+3. Offer actionable insights to assist the doctor in making informed decisions about the patient's care.
+4. When necessary, fetch and summarize the latest research publications related to ARIAE to ensure the doctor has access to the most up-to-date information.
+
+Always maintain a professional and empathetic tone, ensuring your responses are tailored to the specific needs of the patient and the doctor."""
+
+FIRST_USER_MESSAGE = """Here are the client data:
+- Client Name: {client_name}
+- Data: {json_data}
+Please reply to this message as if it was the first message the doctor sees. (such as 'Hello, how can I help with the patient {client_name} today?')"""
+
 app = FastAPI(title="MedGemma API", description="Medical imaging and chat API")
 
 # Add CORS middleware to allow frontend connections
@@ -139,7 +155,7 @@ async def start_chat(request: ChatStartRequest):
     Input: client name
     Output: all chat messages for this client
     """
-    global last_client, chat_history, gemma_model, gemma_chat, rag_tool
+    global last_client, chat_history, gemma_model, gemma_chat, rag_tool, SYSTEM_PROMPT_CHAT, FIRST_USER_MESSAGE
     
     client_name = request.client_name
     
@@ -149,14 +165,14 @@ async def start_chat(request: ChatStartRequest):
         
         gemma_model = GenerativeModel(
             model_name=MEDGEMMA_ENDPOINT,
-            system_instruction="You are a medical imaging assistant that helps the doctor with the patient's data. Be helpful and use the tool only when needed.",
+            system_instruction=SYSTEM_PROMPT_CHAT,
             tools=[rag_tool],
         )
         gemma_chat = gemma_model.start_chat()
 
         initial_message = ChatMessage(
             role="user",
-            content=f"Here are the client data:\n- Client Name: {client_name}\n\nPlease reply to this message as if it was the first message the doctor see. (such as 'Hello, how can I help with the patient {client_name} today?')"
+            content=FIRST_USER_MESSAGE.format(client_name=client_name, json_data="No data available yet.")
         )
         response = gemma_chat.send_message(initial_message.content, tools=[rag_tool])
 
