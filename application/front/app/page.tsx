@@ -35,7 +35,7 @@ export default function Home() {
       if (response.ok) {
         // Download the report file
         const link = document.createElement("a");
-        link.href = "../../report/report.html";
+        link.href = "report/report.html";
         link.download = "report.html";
         document.body.appendChild(link);
         link.click();

@@ -41,11 +41,13 @@ if __name__ == "__main__":
     # Pass the full endpoint resource name and the RAG tool.
     medgemma_model = GenerativeModel(
         model_name=MEDGEMMA_ENDPOINT,
+        system_instruction=
         tools=[rag_tool],
     )
 
     # 3. Start a chat session. This allows the model to maintain context.
     chat = medgemma_model.start_chat()
+    chat.send_message()
 
     print("\n--- Starting MedGemma RAG Chat ---")
     print("--- Type 'quit' or 'exit' to end the session. ---")

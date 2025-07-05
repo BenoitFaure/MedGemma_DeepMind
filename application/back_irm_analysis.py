@@ -12,7 +12,7 @@ from google.cloud import aiplatform
 
 from back_environment import PROJECT_ID, REGION, MEDGEMMA_FT_ENDPOINT_ID, MEDGEMMA_FT_ENDPOINT_REGION
 
-def run_analysis(id):
+def run_analysis_location(id):
 
     # Run Gemma FineTuned on all images
     #          Images in seg are supposed to be pre-processed to already have the segmentations applied
