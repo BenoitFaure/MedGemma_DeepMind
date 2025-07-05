@@ -75,3 +75,12 @@ def extract_files():
 
     print("Saved difference slices to disk.")
     return True
+
+
+if __name__ == "__main__":
+    try:
+        extract_files()
+    except Exception as e:
+        print(f"Error during extraction: {e}")
+    else:
+        print("Extraction completed successfully.")
