@@ -17,8 +17,8 @@ def run_segmentation(id):
         id (str): The MRI ID (e.g., "0" or "1")
     """
     # Define input and output file paths
-    input_file = f"./front/public/mri/{id}/mri_file.nii"
-    output_file = f"./front/public/mri/{id}.seg/mri_file.nii"
+    input_file = f"../application/front/public/mri/{id}/mri_file.nii"
+    output_file = f"../application/front/public/mri/{id}.seg/mri_file.nii"
     
     # Path to the test_remote_endpoint script
     script_path = "../nnunet-inference/test_remote_endpoint.py"
