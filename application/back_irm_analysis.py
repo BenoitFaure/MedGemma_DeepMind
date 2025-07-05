@@ -22,6 +22,9 @@ def run_analysis_location(id):
         str: The predicted brain region where the edema is located (e.g., "frontal", "occipital", "parietal", "temporal")
     '''
 
+    # MOCK FOR DEMO
+    return "frontal"
+
     # Run MedGemma FineTuned on all images
     #          Images in seg are supposed to be pre-processed to already have the segmentations applied
 
