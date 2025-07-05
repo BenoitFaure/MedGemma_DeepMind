@@ -6,7 +6,7 @@ import json
 import time
 import vertexai
 import os
-from back_report import generate_client_report, generate_html, save_html
+from back_report import generate_client_report, generate_html, save_html, save_json, load_json
 from vertexai.generative_models import GenerativeModel, Tool
 from vertexai import rag
 import asyncio
@@ -174,6 +174,7 @@ async def generate_report(request: ReportRequest):
     # Generate the report
     print(f"Generating report for client: {client_name}")
     info_json = generate_client_report(client_name)
+    save_json(info_json)
     html_content = generate_html(info_json)
     save_html(html_content)
 
@@ -200,13 +201,7 @@ async def start_chat(request: ChatStartRequest):
     if client_name != last_client:
         chat_history = []
         last_client = client_name
-        json_data = {}
-        with open(f"./front/public/report/report.json", "r") as f:
-            try:
-                json_data = json.load(f)
-            except json.JSONDecodeError as e:
-                print(f"Error decoding JSON: {e}")
-                json_data = {}
+        json_data = load_json()
         
         gemma_model = GenerativeModel(
             model_name=MEDGEMMA_ENDPOINT,

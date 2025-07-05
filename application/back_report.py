@@ -1,3 +1,4 @@
+import json
 import numpy as np
 import nibabel as nb
 from scipy.ndimage import label
@@ -432,11 +433,20 @@ def save_html(html):
     return save_path
 
 def save_json(info_json):
-    import json
     save_path = f"{REPORT_FOLDER}/report.json"
     with open(save_path, "w") as f:
         json.dump(info_json, f, indent=4)
     return save_path
+
+def load_json():
+    save_path = f"{REPORT_FOLDER}/report.json"
+    with open(save_path, "r") as f:
+        try:
+            info_json = json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            info_json = {}
+    return info_json
 
 
 if __name__ == "__main__":
