@@ -41,7 +41,13 @@ Always maintain a professional and empathetic tone, ensuring your responses are 
 FIRST_USER_MESSAGE = """Here are the client data:
 - Client Name: {client_name}
 - Data: {json_data}
-Please reply to this message as if it was the first message the doctor sees. (such as 'Hello, how can I help with the patient {client_name} today?')"""
+Please reply to this message as if it was the first message the doctor sees.
+
+Please reply to this message as if it was the first message the doctor sees and with the following format:
+I’m your clinical radiology assistant, here to support you in caring for client {client_name} as they continue anti‑amyloid therapy for Alzheimer’s disease. 
+I have reviewed the most recent MRI sequences and accompanying reports, and I have real‑time access to the latest peer‑reviewed research on amyloid‑related imaging abnormalities (ARIA, including ARIA‑E).
+[You can include some more info here]
+"""
 
 app = FastAPI(title="MedGemma API", description="Medical imaging and chat API")
 
