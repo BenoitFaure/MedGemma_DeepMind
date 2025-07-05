@@ -21,6 +21,11 @@ Additionally, a chatbot with access to the latest ARIA-E research through a **Re
 - **Interactive Chatbot**: Allows clinicians to ask complex questions and receive evidence-based answers from the RAG-powered MedGemma-27b.
 - **Integrated Clinical Workflow**: A user-friendly frontend application that brings all functionalities together to support clinical decision-making.
 
+## Google Cloud Tools Used:
+- **Google Cloud Storage (GCS)** to store and retrieve MRI volumes and host the RAG database.
+- **Artifact Registry** to store the Docker image containing the API and the weights of the nnU-NET.
+- **Vertex AI** to deploy the models (nnU-Net + API, fine-tuned MedGemma-4b, MedGemma-27b + RAG) as an endpoints for inference.
+
 
 ## Technical Architecture
 
