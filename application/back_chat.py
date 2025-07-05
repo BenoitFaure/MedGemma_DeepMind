@@ -6,22 +6,7 @@ from back_get_rag_metadata import get_reference_dict
 CITATION_DICT = get_reference_dict()
 
 # Replace source by citation ID in the text, and add citation ID and title at the end
-def cite_json_like(text: str) -> str:
-    """
-    Replaces every *.json or *.jsonl token in `text` with a numbered
-    citation ([1], [2], …).  At the end of the text it appends a
-    reference list, using `titles` to look‑up a human‑readable label.
-
-    Parameters
-    ----------
-    text   : the input string.
-    titles : dict mapping the exact file name (e.g.
-             "10.2169_internalmedicine.5198-24.jsonl") -> title to show.
-
-    Returns
-    -------
-    str – the annotated text.
-    """
+def cite_json_like(response):
     # match words that end in .json or .jsonl, allowing dots, dashes, or underscores
     pattern = r'\b[A-Za-z0-9_.\-]+\.jsonl?\b'
 
@@ -44,6 +29,9 @@ def cite_json_like(text: str) -> str:
         f'[{n}] {CITATION_DICT.get(fname, "Unknown title")}'
         for fname, n in sorted(seen.items(), key=lambda x: x[1])
     ]
+
+    print(f"References: {refs}")
+    print(seen)
 
     return body + '\n\n' + '\n'.join(refs)
 

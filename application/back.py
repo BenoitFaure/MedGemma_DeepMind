@@ -13,7 +13,7 @@ import asyncio
 from datetime import datetime
 from back_segmentation import run_segmentation
 from front.public.mri.slice import extract_files
-from back_chat import cite_json_like
+# from back_chat import cite_json_like
 import json
 import os
 
@@ -21,7 +21,9 @@ import os
 PROJECT_ID        = "gemma-hcls25par-722"
 REGION            = "us-central1" # Must match the region of your resources
 # IMPORTANT: Update this with the resource name of your NEW STANDARD (not dedicated) endpoint.
-MEDGEMMA_ENDPOINT = "projects/gemma-hcls25par-722/locations/us-central1/endpoints/1235003346155208704"
+# MEDGEMMA_ENDPOINT = "projects/gemma-hcls25par-722/locations/us-central1/endpoints/1235003346155208704"
+MEDGEMMA_ENDPOINT = "projects/gemma-hcls25par-722/locations/europe-west4/endpoints/7253594756670816256"
+
 RAG_CORPUS        = (
     "projects/gemma-hcls25par-722"
     "/locations/us-central1"
@@ -257,8 +259,11 @@ async def send_chat_message(request: ChatSendRequest):
     response = gemma_chat.send_message(
         user_message.content, tools=[rag_tool]
     )
-    msg_content = cite_json_like(response.text)
+    msg_content = response.text # cite_json_like(response.text)
     message = ChatMessage(role="assistant", content=msg_content)
+    # print(response)
+    # with open("dumpresp.txt", "w") as f:
+    #     f.write(str(response))
     chat_history.append(message)
 
     return message
