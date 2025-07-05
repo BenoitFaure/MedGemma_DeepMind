@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -140,7 +141,13 @@ export default function ChatPage({ params }: { params: { patient: string } }) {
                       : "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  {message.role === "assistant" ? (
+                    <div className="text-sm leading-relaxed">
+                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="text-sm leading-relaxed">{message.content}</p>
+                  )}
                 </div>
               </div>
             ))}

@@ -1,5 +1,14 @@
 "use client";
 
+// Ajout des types pour Chart.js dynamiques sur window
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare global {
+  interface Window {
+    Chart?: any;
+    _evolutionChartInstance?: any;
+  }
+}
+
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -34,6 +43,95 @@ export default function ReportPage() {
 
     loadReport();
   }, []);
+
+  // Effet pour exécuter le script Chart.js après l'injection du HTML
+  useEffect(() => {
+    if (!reportHtml) return;
+    const chartCanvas = document.getElementById('evolutionChart');
+    if (chartCanvas && typeof window !== 'undefined') {
+      if (!(window as any).Chart) {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
+        script.onload = () => {
+          createChart();
+        };
+        document.body.appendChild(script);
+      } else {
+        createChart();
+      }
+    }
+    // Fonction pour créer le graphique
+    function createChart() {
+      if (!(window as any).Chart) return;
+      // Empêche la création multiple
+      if ((window as any)._evolutionChartInstance) {
+        (window as any)._evolutionChartInstance.destroy();
+      }
+      const canvas = document.getElementById('evolutionChart') as HTMLCanvasElement | null;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      (window as any)._evolutionChartInstance = new (window as any).Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['2025-02-27', '2025-03-24', '2025-04-18'],
+          datasets: [{
+            label: 'Max Diameter (cm)',
+            data: [0.74, 0.74, 1.05],
+            borderColor: '#3498db',
+            backgroundColor: 'transparent',
+            borderWidth: 3,
+            pointBackgroundColor: '#3498db',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            fill: false,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2.5,
+          layout: {
+            padding: 0
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Diameter (cm)',
+                font: {
+                  weight: 'bold'
+                }
+              },
+              grid: {
+                color: 'rgba(0,0,0,0.05)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Scan Date',
+                font: {
+                  weight: 'bold'
+                }
+              },
+              grid: {
+                color: 'rgba(0,0,0,0.05)'
+              }
+            }
+          }
+        }
+      });
+    }
+  }, [reportHtml]);
 
   const handleDownloadPDF = async () => {
     setDownloading(true);

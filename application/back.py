@@ -6,7 +6,7 @@ import json
 import time
 import vertexai
 import os
-from back_report import generate_client_report, generate_html, save_html, save_json, load_json
+from back_report import generate_client_report, generate_html, save_html, save_json, load_json, save_pdf
 from vertexai.generative_models import GenerativeModel, Tool
 from vertexai import rag
 import asyncio
@@ -188,6 +188,7 @@ async def generate_report(request: ReportRequest):
     save_json(info_json)
     html_content = generate_html(info_json)
     save_html(html_content)
+    save_pdf(html_content)
 
     return ReportResponse(
         response=f"Report generated for client: {client_name}"
