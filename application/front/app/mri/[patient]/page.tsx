@@ -68,37 +68,39 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
   }, [currentSlice, showSegmentation, showProgression]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#181028] via-[#1a1333] to-black">
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">MRI Viewer</h1>
-            <p className="text-gray-600">Patient: {patientName}</p>
+            <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-lg mb-2" style={{ letterSpacing: '0.03em' }}>MRI <span className="text-[#A259F7]">Viewer</span></h1>
+            <p className="text-[#E0D7F7]">Patient: {patientName}</p>
           </div>
           <Link 
             href="/"
-            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            className="px-5 py-2 bg-gradient-to-r from-[#3B1E6D] to-[#A259F7] text-white rounded-2xl hover:from-[#A259F7] hover:to-[#3B1E6D] transition-colors shadow-lg border border-[#A259F7]/40 font-semibold text-lg"
+            style={{ boxShadow: '0 0 8px #A259F7aa' }}
           >
             Back to Home
           </Link>
         </div>
 
         {/* Controls */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+        <div className="bg-[#1a1333]/80 rounded-3xl shadow-2xl p-8 mb-8 border border-[#A259F7]/30 backdrop-blur-md">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700 font-medium">Slice: {currentSlice + 1} / {totalSlices}</span>
+              <span className="text-[#E0D7F7] font-medium">Slice: {currentSlice + 1} / {totalSlices}</span>
               <button
                 onClick={() => {
                   setShowSegmentation(!showSegmentation);
                   if (!showSegmentation) setShowProgression(false);
                 }}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-xl font-semibold transition-colors border border-[#A259F7]/40 shadow-md ${
                   showSegmentation
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    ? "bg-gradient-to-r from-[#A259F7] to-[#3B1E6D] text-white"
+                    : "bg-[#221a36] text-[#A259F7] hover:bg-[#2a1a4d]"
                 }`}
+                style={showSegmentation ? { boxShadow: '0 0 8px #A259F7aa' } : {}}
               >
                 {showSegmentation ? "Hide Segmentation" : "Show Segmentation"}
               </button>
@@ -107,11 +109,12 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
                   setShowProgression(!showProgression);
                   if (!showProgression) setShowSegmentation(false);
                 }}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-xl font-semibold transition-colors border border-[#A259F7]/40 shadow-md ${
                   showProgression
-                    ? "bg-green-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    ? "bg-gradient-to-r from-[#F76B1C] to-[#A259F7] text-white"
+                    : "bg-[#221a36] text-[#F76B1C] hover:bg-[#2a1a4d]"
                 }`}
+                style={showProgression ? { boxShadow: '0 0 8px #F76B1Caa' } : {}}
               >
                 {showProgression ? "Hide Progression" : "Show Progression"}
               </button>
@@ -126,12 +129,12 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
               max={totalSlices - 1}
               value={currentSlice}
               onChange={(e) => setCurrentSlice(parseInt(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-2 bg-[#2a1a4d] rounded-lg appearance-none cursor-pointer slider"
               style={{
-                background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(currentSlice / (totalSlices - 1)) * 100}%, #e5e7eb ${(currentSlice / (totalSlices - 1)) * 100}%, #e5e7eb 100%)`
+                background: `linear-gradient(to right, #A259F7 0%, #A259F7 ${(currentSlice / (totalSlices - 1)) * 100}%, #221a36 ${(currentSlice / (totalSlices - 1)) * 100}%, #221a36 100%)`
               }}
             />
-            <div className="flex justify-between text-sm text-gray-500 mt-2">
+            <div className="flex justify-between text-sm text-[#A259F7] mt-2">
               <span>Slice 1</span>
               <span>Slice {totalSlices}</span>
             </div>
@@ -139,17 +142,17 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
         </div>
 
         {/* MRI Images */}
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-[#1a1333]/80 rounded-3xl shadow-2xl p-8 border border-[#A259F7]/30 backdrop-blur-md">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Image */}
             <div className="space-y-4">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-800">{leftDate}</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="text-xl font-bold text-white">{leftDate}</h3>
+                <p className="text-sm text-[#A259F7]">
                   {showSegmentation ? "With Segmentation" : "Original"}
                 </p>
               </div>
-              <div className="relative bg-gray-100 rounded-lg overflow-hidden" style={{ aspectRatio: "1/1" }}>
+              <div className="relative bg-[#221a36] rounded-2xl overflow-hidden border border-[#A259F7]/20" style={{ aspectRatio: "1/1" }}>
                 <img
                   src={imagePaths.left}
                   alt={`Left MRI - Slice ${currentSlice + 1}`}
@@ -157,12 +160,12 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
                   onLoad={() => setImagesLoaded(true)}
                   onError={(e) => {
                     console.error("Failed to load left image:", imagePaths.left);
-                    (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzlDQTNBRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=";
+                    (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzlDQTNBRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=";
                   }}
                 />
                 {!imagesLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A259F7]"></div>
                   </div>
                 )}
               </div>
@@ -171,8 +174,8 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
             {/* Right Image */}
             <div className="space-y-4">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-800">{rightDate}</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="text-xl font-bold text-white">{rightDate}</h3>
+                <p className="text-sm text-[#A259F7]">
                   {showProgression
                     ? "Progression"
                     : showSegmentation
@@ -180,7 +183,7 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
                       : "Original"}
                 </p>
               </div>
-              <div className="relative bg-gray-100 rounded-lg overflow-hidden" style={{ aspectRatio: "1/1" }}>
+              <div className="relative bg-[#221a36] rounded-2xl overflow-hidden border border-[#A259F7]/20" style={{ aspectRatio: "1/1" }}>
                 <img
                   src={imagePaths.right}
                   alt={`Right MRI - Slice ${currentSlice + 1}`}
@@ -195,21 +198,23 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex justify-center items-center space-x-4 mt-6 pt-6 border-t border-gray-200">
+          <div className="flex justify-center items-center space-x-4 mt-8 pt-8 border-t border-[#A259F7]/20">
             <button
               onClick={() => setCurrentSlice(Math.max(0, currentSlice - 1))}
               disabled={currentSlice === 0}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-gradient-to-r from-[#3B1E6D] to-[#A259F7] text-white rounded-xl hover:from-[#A259F7] hover:to-[#3B1E6D] transition-colors font-semibold shadow-lg border border-[#A259F7]/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ boxShadow: '0 0 8px #A259F7aa' }}
             >
               Previous
             </button>
-            <span className="text-gray-600 font-medium min-w-[120px] text-center">
+            <span className="text-[#E0D7F7] font-semibold min-w-[120px] text-center">
               Slice {currentSlice + 1} of {totalSlices}
             </span>
             <button
               onClick={() => setCurrentSlice(Math.min(totalSlices - 1, currentSlice + 1))}
               disabled={currentSlice === totalSlices - 1}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-gradient-to-r from-[#A259F7] to-[#3B1E6D] text-white rounded-xl hover:from-[#3B1E6D] hover:to-[#A259F7] transition-colors font-semibold shadow-lg border border-[#A259F7]/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ boxShadow: '0 0 8px #A259F7aa' }}
             >
               Next
             </button>
@@ -223,21 +228,19 @@ export default function MRIViewer({ params }: { params: { patient: string } }) {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #3b82f6;
+          background: #A259F7;
           cursor: pointer;
           box-shadow: 0 0 2px 0 #555;
           transition: background .15s ease-in-out;
         }
-        
         .slider::-webkit-slider-thumb:hover {
-          background: #2563eb;
+          background: #3B1E6D;
         }
-        
         .slider::-moz-range-thumb {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #3b82f6;
+          background: #A259F7;
           cursor: pointer;
           border: none;
           box-shadow: 0 0 2px 0 #555;
