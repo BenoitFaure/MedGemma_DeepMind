@@ -55,13 +55,6 @@ def run_analysis(id):
         success, encoded_image = cv2.imencode('.png', slice_data)
         # Encode the bytes to base64
         img_b64 = base64.b64encode(encoded_image).decode('utf-8')
-        
-         
-        
-        # Encode to base64
-        img_b64 = base64.b64encode(buffer.getvalue()).decode()
-        
-        print(f"Processing slice {slice_idx + 1}/{data.shape[2]}")
 
         # Instance and Message
         instances = [
