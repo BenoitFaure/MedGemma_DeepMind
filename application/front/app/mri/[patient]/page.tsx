@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export default function MRIViewer({ params }: { params: { patient: string } }) {
+export default async function MRIViewer({ params }: { params: { patient: string } }) {
   const patientName = params.patient.replace("-", " ");
   const [currentSlice, setCurrentSlice] = useState(77); // Middle slice (154/2)
   const [showSegmentation, setShowSegmentation] = useState(false);

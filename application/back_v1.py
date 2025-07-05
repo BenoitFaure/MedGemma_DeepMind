@@ -96,44 +96,38 @@ async def segmentation():
     Input: nothing
     Output: status confirmation
     """
-    await asyncio.sleep(3)
-    return SegmentationResponse(
+    try:
+        # Run segmentation for both MRI IDs (0 and 1)
+        print("Starting segmentation process...")
+        
+        # Run segmentation for ID "0"
+        success_0 = run_segmentation("0")
+        if not success_0:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 0")
+        
+        # Run segmentation for ID "1"
+        success_1 = run_segmentation("1")
+        if not success_1:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 1")
+        
+        # Extract files after segmentation
+        print("Starting file extraction...")
+        extract_success = extract_files()
+        if not extract_success:
+            raise HTTPException(status_code=500, detail="File extraction failed")
+        
+        print("Segmentation and extraction completed successfully!")
+        
+        # Segmentation done send ok response
+        return SegmentationResponse(
             response="Segmentation and extraction completed successfully."
         )
-
-    # try:
-    #     # Run segmentation for both MRI IDs (0 and 1)
-    #     print("Starting segmentation process...")
         
-    #     # Run segmentation for ID "0"
-    #     success_0 = run_segmentation("0")
-    #     if not success_0:
-    #         raise HTTPException(status_code=500, detail="Segmentation failed for ID 0")
-        
-    #     # Run segmentation for ID "1"
-    #     success_1 = run_segmentation("1")
-    #     if not success_1:
-    #         raise HTTPException(status_code=500, detail="Segmentation failed for ID 1")
-        
-    #     # Extract files after segmentation
-    #     print("Starting file extraction...")
-    #     extract_success = extract_files()
-    #     if not extract_success:
-    #         raise HTTPException(status_code=500, detail="File extraction failed")
-        
-    #     print("Segmentation and extraction completed successfully!")
-        
-    #     # Segmentation done send ok response
-    #     return SegmentationResponse(
-    #         response="Segmentation and extraction completed successfully."
-    #     )
-    
-        
-    # except HTTPException:
-    #     raise
-    # except Exception as e:
-    #     print(f"Error in segmentation endpoint: {e}")
-    #     raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error in segmentation endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
 # Generate Info file and Report
@@ -148,26 +142,26 @@ async def generate_report(request: ReportRequest):
     
     # Check if the segmentation has been done
     seg_file = f"./front/public/mri/0.seg/mri_file.nii"
-    # if not os.path.exists(seg_file):
-    #     print("Starting segmentation process...")
+    if not os.path.exists(seg_file):
+        print("Starting segmentation process...")
         
-    #     # Run segmentation for ID "0"
-    #     success_0 = run_segmentation("0")
-    #     if not success_0:
-    #         raise HTTPException(status_code=500, detail="Segmentation failed for ID 0")
+        # Run segmentation for ID "0"
+        success_0 = run_segmentation("0")
+        if not success_0:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 0")
         
-    #     # Run segmentation for ID "1"
-    #     success_1 = run_segmentation("1")
-    #     if not success_1:
-    #         raise HTTPException(status_code=500, detail="Segmentation failed for ID 1")
+        # Run segmentation for ID "1"
+        success_1 = run_segmentation("1")
+        if not success_1:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 1")
         
-    #     # Extract files after segmentation
-    #     print("Starting file extraction...")
-    #     extract_success = extract_files()
-    #     if not extract_success:
-    #         raise HTTPException(status_code=500, detail="File extraction failed")
+        # Extract files after segmentation
+        print("Starting file extraction...")
+        extract_success = extract_files()
+        if not extract_success:
+            raise HTTPException(status_code=500, detail="File extraction failed")
         
-        # print("Segmentation and extraction completed successfully!")
+        print("Segmentation and extraction completed successfully!")
 
     # Generate the report
     print(f"Generating report for client: {client_name}")
@@ -238,10 +232,9 @@ async def send_chat_message(request: ChatSendRequest):
     response = gemma_chat.send_message(
         user_message.content, tools=[rag_tool]
     )
-    message = ChatMessage(role="assistant", content=response.text)
-    chat_history.append(message)
+    chat_history.append(ChatMessage(role="assistant", content=response.text))
 
-    return message
+    return response
 
 if __name__ == "__main__":
     import uvicorn

@@ -9,7 +9,8 @@ from google.cloud import aiplatform
 # --- Vertex AI Configuration ---
 PROJECT_ID = 'gemma-hcls25par-722'  
 REGION = 'europe-west1'            
-ENDPOINT_ID = '8337460333983563776' 
+# ENDPOINT_ID = '8337460333983563776' 
+ENDPOINT_ID = '4563443846247088128'
 
 # --- GCS Bucket Configuration ---
 # LOCAL_FILE_PATH = "data/LUMIERE_001_0000.nii.gz"
