@@ -72,6 +72,7 @@ def run_analysis(id):
             instances=instances, use_dedicated_endpoint=True
         )
 
+        # EXTRACT PREDICTION
 
         # Display
-        prediction = response.predictions[0]
+        slice_predictions.append(response.predictions[0])
