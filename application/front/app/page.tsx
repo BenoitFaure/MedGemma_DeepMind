@@ -6,11 +6,26 @@ import Link from "next/link";
 interface Patient {
   id: string;
   name: string;
+  dateOfBirth: string;
+  age: number;
+  treatmentStartDate: string;
 }
 
 const PATIENTS: Patient[] = [
-  { id: "alice", name: "Alice" },
-  { id: "bob", name: "Bob" },
+  { 
+    id: "alice", 
+    name: "Alice", 
+    dateOfBirth: "1975-03-15",
+    age: 49,
+    treatmentStartDate: "2024-01-15"
+  },
+  { 
+    id: "bob", 
+    name: "Bob",
+    dateOfBirth: "1968-08-22",
+    age: 56,
+    treatmentStartDate: "2023-11-08"
+  },
 ];
 
 export default function Home() {
@@ -88,7 +103,29 @@ export default function Home() {
                 className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={() => togglePatient(patient.id)}
               >
-                <h2 className="text-xl font-semibold text-gray-800">{patient.name}</h2>
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2">{patient.name}</h2>
+                  <div className="flex flex-wrap gap-6 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span><strong>DOB:</strong> {new Date(patient.dateOfBirth).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span><strong>Age:</strong> {patient.age} years</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      <span><strong>Treatment Start:</strong> {new Date(patient.treatmentStartDate).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
                 <svg 
                   className={`w-6 h-6 text-gray-500 transform transition-transform ${
                     expandedPatient === patient.id ? 'rotate-90' : ''
