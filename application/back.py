@@ -13,6 +13,7 @@ import asyncio
 from datetime import datetime
 from back_segmentation import run_segmentation
 from front.public.mri.slice import extract_files
+from back_chat import cite_json_like
 import json
 import os
 
@@ -254,8 +255,8 @@ async def send_chat_message(request: ChatSendRequest):
     response = gemma_chat.send_message(
         user_message.content, tools=[rag_tool]
     )
-    print(response)
-    message = ChatMessage(role="assistant", content=response.text)
+    msg_content = cite_json_like(response.text)
+    message = ChatMessage(role="assistant", content=msg_content)
     chat_history.append(message)
 
     return message
