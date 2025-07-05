@@ -1,4 +1,4 @@
-# GemmARIA: AI-Powered Neurological Support for Anti-Amyloid Therapies
+# GemmARIA: Agentic AI Copilot for Safer Alzheimer Treatment Monotoring
 
 ![Project Banner](https://placehold.co/1200x300?text=GemmARIA)
 
@@ -13,11 +13,12 @@ Additionally, a chatbot with access to the latest ARIA-E research through a **Re
 ## Key Contributions
 
 - **Automated Edema Segmentation**: Leverages a custom-trained nnU-Net model to accurately identify and segment ARIA-E regions in FLAIR MRI scans.
-- **Longitudinal MRI Comparison**: Generates reports comparing a patient's current and previous MRI scans to track edema evolution.
-- **LLM-Refined Reports**: Uses a fine-tuned MedGemma model to produce clear, clinically relevant, and easy-to-understand narrative reports.
+- **Patient Reports**: Generates reports comparing a patient's current and previous MRI scans to track edema evolution.
+- **Fine-tuned MedGemma**: Adapted to MRI sequences of both healthy and affected brains to interpret scans and identify the most damaged regions. This enhances the quality and precision of the generated report. Available on [Hugging Face](https://huggingface.co/axel-darmouni/medgemma-4b-it-sft-lora-brain-regions)
+- **LLM-Refined Reports**: Uses a MedGemma-4b model to produce clear, clinically relevant, and easy-to-understand narrative reports.
 - **Up-to-Date RAG Knowledge Base**: Integrates a RAG system with MedGemma, providing access to the latest research papers on anti-amyloid therapies and ARIA.
 - **Automated Knowledge Updates**: A cloud-based pipeline continuously ingests and processes new scientific literature into the RAG database.
-- **Interactive Chatbot**: Allows clinicians to ask complex questions and receive evidence-based answers from the RAG-powered MedGemma.
+- **Interactive Chatbot**: Allows clinicians to ask complex questions and receive evidence-based answers from the RAG-powered MedGemma-27b.
 - **Integrated Clinical Workflow**: A user-friendly frontend application that brings all functionalities together to support clinical decision-making.
 
 
@@ -33,7 +34,7 @@ We trained a `nnU-Net` model on a private dataset of FLAIR MRI scans to perform 
 
 ### 2. Fine-Tuned MedGemma for MRI Interpretation
 
-We fine-tuned Google's MedGemma model to understand the context of ARIA-E and interpret the segmentation masks from our nnU-Net model. This specialized model is capable of describing the location, size, and changes in edema over time in a structured manner.
+We fine-tuned Google's MedGemma model to understand the context of ARIA-E and interpret the segmentation masks from our nnU-Net model. This specialized model is capable of describing the location and changes in edema over time in a structured manner. This model is available on [Hugging Face](https://huggingface.co/axel-darmouni/medgemma-4b-it-sft-lora-brain-regions)
 
 > To learn more about the fine-tuning dataset, methodology, and evaluation, refer to the **`medgemma_finetuning/README.md`**.
 
