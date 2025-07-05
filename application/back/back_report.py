@@ -11,8 +11,6 @@ try:
     from weasyprint import HTML, CSS
     WEASYPRINT_AVAILABLE = True
 except ImportError:
-    print("Warning: weasyprint not installed. PDF generation will not be available.")
-    print("Install with: pip install weasyprint")
     WEASYPRINT_AVAILABLE = False
 
 MRI_FOLDER = "./front/public/mri"
@@ -564,13 +562,3 @@ if __name__ == "__main__":
         print(f"PDF generation skipped: {e}")
     except Exception as e:
         print(f"PDF generation failed: {e}")
-
-
-# Generates a Json with the following information:
-# - Client Info
-# - IRM Analysis
-# - Segmentation Analysis
-# - Stats
-# - MedGemma Analysis
-
-# Much of the information is contained in frontend

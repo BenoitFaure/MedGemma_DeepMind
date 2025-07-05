@@ -22,9 +22,6 @@ def run_analysis_location(id):
         str: The predicted brain region where the edema is located (e.g., "frontal", "occipital", "parietal", "temporal")
     '''
 
-    # MOCK FOR DEMO
-    return "frontal"
-
     # Run MedGemma FineTuned on all images
     #          Images in seg are supposed to be pre-processed to already have the segmentations applied
 
@@ -106,10 +103,6 @@ def run_analysis(json_data):
     Returns:
         str: The severity of ARIA-E lesions (MILD, MODERATE, or SEVERE).
     '''
-
-    # MOCK FOR DEMO
-    decision = "MILD"
-    return decision, f"The report indicates 6 sites of involvement and a maximum lesion diameter of 1.1 cm. According to the grading criteria, more than 1 site of involvement where each lesion is less than 10 cm classifies the severity as {decision}."
 
     # Run MedGemma on json_data
 

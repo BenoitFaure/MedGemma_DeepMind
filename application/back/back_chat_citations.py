@@ -6,7 +6,7 @@ from back_get_rag_metadata import get_reference_dict
 CITATION_DICT = get_reference_dict()
 
 # Replace source by citation ID in the text, and add citation ID and title at the end
-def cite_json_like(response):
+def cite_json_like(text: str) -> str:
     # match words that end in .json or .jsonl, allowing dots, dashes, or underscores
     pattern = r'\b[A-Za-z0-9_.\-]+\.jsonl?\b'
 
