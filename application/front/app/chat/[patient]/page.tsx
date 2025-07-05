@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 interface ChatMessage {
@@ -14,8 +15,11 @@ export default function ChatPage({ params }: { params: { patient: string } }) {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
   
-  const patientName = params.patient.replace("-", " ");
+  // Get client name from URL params if available, otherwise use patient param
+  const clientNameFromUrl = searchParams.get('clientName');
+  const patientName = clientNameFromUrl || params.patient.replace("-", " ");
   const capitalizedName = patientName.split(" ").map(word => 
     word.charAt(0).toUpperCase() + word.slice(1)
   ).join(" ");

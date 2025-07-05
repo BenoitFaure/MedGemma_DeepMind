@@ -13,6 +13,8 @@ import asyncio
 from datetime import datetime
 from back_segmentation import run_segmentation
 from front.public.mri.slice import extract_files
+import json
+import os
 
 # --- Configuration ---
 PROJECT_ID        = "gemma-hcls25par-722"
@@ -198,6 +200,13 @@ async def start_chat(request: ChatStartRequest):
     if client_name != last_client:
         chat_history = []
         last_client = client_name
+        json_data = {}
+        with open(f"./front/public/report/report.json", "r") as f:
+            try:
+                json_data = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON: {e}")
+                json_data = {}
         
         gemma_model = GenerativeModel(
             model_name=MEDGEMMA_ENDPOINT,
@@ -208,7 +217,7 @@ async def start_chat(request: ChatStartRequest):
 
         initial_message = ChatMessage(
             role="user",
-            content=FIRST_USER_MESSAGE.format(client_name=client_name, json_data="No data available yet.")
+            content=FIRST_USER_MESSAGE.format(client_name=client_name, json_data=json_data)
         )
         response = gemma_chat.send_message(initial_message.content, tools=[rag_tool])
 

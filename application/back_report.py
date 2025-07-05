@@ -3,7 +3,7 @@ import nibabel as nb
 from scipy.ndimage import label
 from scipy.ndimage import center_of_mass, distance_transform_edt
 import cv2
-from back_irm_analysis import run_analysis_location
+from back_irm_analysis import run_analysis_location, run_analysis
 
 MRI_FOLDER = "./front/public/mri"
 REPORT_FOLDER = "./front/public/report"
@@ -429,6 +429,13 @@ def save_html(html):
     save_path = f"{REPORT_FOLDER}/report.html"
     with open(save_path, "w") as f:
         f.write(html)
+    return save_path
+
+def save_json(info_json):
+    import json
+    save_path = f"{REPORT_FOLDER}/report.json"
+    with open(save_path, "w") as f:
+        json.dump(info_json, f, indent=4)
     return save_path
 
 

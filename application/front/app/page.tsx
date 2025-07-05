@@ -9,8 +9,8 @@ interface Patient {
 }
 
 const PATIENTS: Patient[] = [
-  { id: "jean-roger", name: "Jean Roger" },
-  { id: "bibouche-nicole", name: "Bibouche Nicole" },
+  { id: "alice", name: "Alice" },
+  { id: "bob", name: "Bob" },
 ];
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
     setExpandedPatient(expandedPatient === patientId ? null : patientId);
   };
 
-  const handleDownloadReport = async (patientName: string) => {
+  const handleViewReport = async (patientName: string, patientId: string) => {
     setLoading("report");
     try {
       const response = await fetch("http://localhost:8000/report", {
@@ -33,16 +33,11 @@ export default function Home() {
       });
       
       if (response.ok) {
-        // Download the report file
-        const link = document.createElement("a");
-        link.href = "report/report.html";
-        link.download = "report.html";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Navigate to the report page
+        window.location.href = `/report/${patientId}?clientName=${encodeURIComponent(patientName)}`;
       }
     } catch (error) {
-      console.error("Error downloading report:", error);
+      console.error("Error generating report:", error);
     } finally {
       setLoading(null);
     }
@@ -116,10 +111,10 @@ export default function Home() {
                       Visualize MRI
                     </button>
                     <button
-                      onClick={() => handleDownloadReport(patient.name)}
+                      onClick={() => handleViewReport(patient.name, patient.id)}
                       className="flex-1 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-center font-medium"
                     >
-                      Download Report
+                      View Report
                     </button>
                     <Link 
                       href={`/chat/${patient.id}`}
