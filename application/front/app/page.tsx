@@ -9,15 +9,17 @@ interface Patient {
   dateOfBirth: string;
   age: number;
   treatmentStartDate: string;
+  newMRIAvailableDate?: string; // Optional property for new MRI availability
 }
 
 const PATIENTS: Patient[] = [
   { 
     id: "alice", 
     name: "Alice", 
-    dateOfBirth: "1975-03-15",
-    age: 49,
-    treatmentStartDate: "2024-01-15"
+    dateOfBirth: "1947-03-15",
+    age: 78,
+    treatmentStartDate: "2024-01-15",
+    newMRIAvailableDate: "2025-04-18"
   },
   { 
     id: "bob", 
@@ -104,7 +106,15 @@ export default function Home() {
                 onClick={() => togglePatient(patient.id)}
               >
                 <div className="flex-1">
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2">{patient.name}</h2>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                    {patient.name}
+                    {/* Badge pour Alice si newMRIAvailableDate existe */}
+                    {patient.newMRIAvailableDate && (
+                      <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full font-semibold border border-blue-300">
+                        New MRI available · {new Date(patient.newMRIAvailableDate).toLocaleDateString()}
+                      </span>
+                    )}
+                  </h2>
                   <div className="flex flex-wrap gap-6 text-sm text-gray-600">
                     <div className="flex items-center gap-1">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

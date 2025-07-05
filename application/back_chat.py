@@ -6,7 +6,7 @@ from back_get_rag_metadata import get_reference_dict
 CITATION_DICT = get_reference_dict()
 
 # Replace source by citation ID in the text, and add citation ID and title at the end
-def cite_json_like(text: str, titles: dict[str, str]) -> str:
+def cite_json_like(text: str) -> str:
     """
     Replaces every *.json or *.jsonl token in `text` with a numbered
     citation ([1], [2], …).  At the end of the text it appends a
@@ -41,7 +41,7 @@ def cite_json_like(text: str, titles: dict[str, str]) -> str:
 
     # 2) build reference block
     refs = [
-        f'[{n}] {titles.get(CITATION_DICT[fname], "Unknown title")}'
+        f'[{n}] {CITATION_DICT.get(fname, "Unknown title")}'
         for fname, n in sorted(seen.items(), key=lambda x: x[1])
     ]
 
