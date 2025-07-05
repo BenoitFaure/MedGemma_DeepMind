@@ -1,4 +1,7 @@
 # 🧠GemmARIA: AI-Powered Neurological Support for Anti-Amyloid Therapies
+
+![Project Banner](https://placehold.co/1200x300?text=GemmARIA)
+
 ## 🌟 Overview
 
 This project aims to support neurologists in monitoring patients undergoing anti-amyloid therapy for Alzheimer's disease — treatments that, while promising, can cause side effects such as **Amyloid-Related Imaging Abnormalities with edema (ARIA-E)**, which leads to brain edema visible on FLAIR MRI scans. 
@@ -6,16 +9,6 @@ This project aims to support neurologists in monitoring patients undergoing anti
 Our solution provides physicians with **automated, longitudinal reports** that compare a patient's MRIs over time, highlighting the evolution of these edemas using state-of-the-art **nnU-Net** segmentation outputs. The generated report, which helps assess whether treatment should continue, is refined by **MedGemma** for enhanced clarity and clinical relevance. 
 
 Additionally, a chatbot with access to the latest ARIA-E research through a **Retrieval-Augmented Generation (RAG)** system offers up-to-date scientific context, empowering neurologists to make informed, evidence-based decisions on this cutting-edge therapy.IA: Agentic AI Copilot for Safer Alzheimer Treatment Monitoring
-
-![Project Banner](https://placehold.co/1200x300?text=GemmARIA)
-
-## Overview
-
-This project aims to support neurologists in monitoring patients undergoing anti-amyloid therapy for Alzheimer’s disease — treatments that, while promising, can cause side effects such as Amyloid-Related Imaging Abnormalities with edema (ARIA-E), which leads to brain edema visible on FLAIR MRI scans. 
-
-Our solution provides physicians with automated, longitudinal reports that compare a patient’s MRIs over time, highlighting the evolution of these edemas using state-of-the-art **nnU-Net** segmentation outputs. The generated report, which helps assess whether treatment should continue, is refined by **MedGemma** for enhanced clarity and clinical relevance. 
-
-Additionally, a chatbot with access to the latest ARIA-E research through a **Retrieval-Augmented Generation (RAG)** system offers up-to-date scientific context, empowering neurologists to make informed, evidence-based decisions on this cutting-edge therapy.
 
 ## 🚀 Key Contributions
 
@@ -164,6 +157,12 @@ We welcome contributions! Please read our `CONTRIBUTING.md` file for details on 
 ## 📄 License
 
 This project is licensed under the MIT License - see the `LICENSE` file for details.
+
+### 📋 Gemmaria Presentation
+
+<embed src="PRESENTATION_GEMMARIA.pdf" type="application/pdf" width="100%" height="600px" />
+
+**Note:** If the PDF doesn't display in your browser, you can [download it directly](./PRESENTATION_GEMMARIA.pdf) or [view it in GitHub](https://github.com/your-username/your-repo/blob/main/PRESENTATION_GEMMARIA.pdf).
 
 ---
 
