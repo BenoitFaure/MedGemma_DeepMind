@@ -25,13 +25,15 @@ def extract_metadata_from_jsonl(bucket_name, blob_name):
         data = json.loads(line)
         return {
             "document_title": data.get("document_title"),
+            "jsonl_file": blob_name
         }
     return None
 
-def main():
+def get_reference_list():
     jsonl_files = list_jsonl_files(GCS_BUCKET, PREFIX)
     all_metadata = []
-    title_list = []
+    final_list = []
+
     for file in jsonl_files:
         metadata = extract_metadata_from_jsonl(GCS_BUCKET, file)
         if metadata:
@@ -39,10 +41,9 @@ def main():
 
     # Output the metadata
     for doc in all_metadata:
-        title_list.append(doc["document_title"])
-        # print(json.dumps(doc, indent=2))
-    print(len(all_metadata))
-    print(title_list)
+        final_list.append((doc['jsonl_file'].split('/')[1], doc['document_title']))
+
+    return final_list
 
 if __name__ == "__main__":
-    main()
+    print(get_reference_list())
