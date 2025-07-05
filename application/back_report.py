@@ -4,7 +4,16 @@ import nibabel as nb
 from scipy.ndimage import label
 from scipy.ndimage import center_of_mass, distance_transform_edt
 import cv2
+import os
 from back_irm_analysis import run_analysis_location, run_analysis
+
+try:
+    from weasyprint import HTML, CSS
+    WEASYPRINT_AVAILABLE = True
+except ImportError:
+    print("Warning: weasyprint not installed. PDF generation will not be available.")
+    print("Install with: pip install weasyprint")
+    WEASYPRINT_AVAILABLE = False
 
 MRI_FOLDER = "./front/public/mri"
 REPORT_FOLDER = "./front/public/report"
@@ -426,6 +435,7 @@ def generate_html(info_json):
     )
     return out
 
+# HTML and JSON ##################
 def save_html(html):
     save_path = f"{REPORT_FOLDER}/report.html"
     with open(save_path, "w") as f:
@@ -448,12 +458,112 @@ def load_json():
             info_json = {}
     return info_json
 
+# PDF GENERATION ##################
+def generate_pdf_from_html(html_content, output_path=None):
+    """
+    Convert HTML content to PDF using weasyprint
+    
+    Args:
+        html_content (str): HTML content to convert to PDF
+        output_path (str, optional): Path where to save the PDF. If None, saves to REPORT_FOLDER/report.pdf
+        
+    Returns:
+        str: Path to the generated PDF file
+        
+    Raises:
+        ImportError: If weasyprint is not installed
+        Exception: If PDF generation fails
+    """
+    if not WEASYPRINT_AVAILABLE:
+        raise ImportError("weasyprint is not installed. Install with: pip install weasyprint")
+    
+    try:
+        # Set default output path if not provided
+        if output_path is None:
+            output_path = f"{REPORT_FOLDER}/report.pdf"
+        
+        # Ensure the output directory exists
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        # Create HTML document from string
+        html_doc = HTML(string=html_content)
+        
+        # Optional: Add custom CSS for better PDF formatting
+        pdf_css = CSS(string="""
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+            
+            /* Ensure images fit on page */
+            .visualization img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            /* Better chart rendering for PDF */
+            .chart-container {
+                page-break-inside: avoid;
+            }
+            
+            /* Prevent page breaks inside metric cards */
+            .metric-card {
+                page-break-inside: avoid;
+            }
+            
+            /* Header cards page break control */
+            .header-cards {
+                page-break-inside: avoid;
+            }
+        """)
+        
+        # Generate PDF
+        html_doc.write_pdf(output_path, stylesheets=[pdf_css])
+        
+        print(f"PDF successfully generated: {output_path}")
+        return output_path
+        
+    except Exception as e:
+        print(f"Error generating PDF: {e}")
+        raise
+
+def save_pdf(html_content, output_path=None):
+    """
+    Convenience function to save HTML as PDF
+    
+    Args:
+        html_content (str): HTML content to convert
+        output_path (str, optional): Output path for PDF
+        
+    Returns:
+        str: Path to generated PDF file
+    """
+    return generate_pdf_from_html(html_content, output_path)
+
+
 
 if __name__ == "__main__":
     client_name = "John Doe"
     info_json = generate_client_report(client_name)
     html_content = generate_html(info_json)
+    
+    # Save HTML
     save_html(html_content)
+    
+    # Save JSON
+    save_json(info_json)
+    
+    # Generate PDF
+    try:
+        pdf_path = save_pdf(html_content)
+        print(f"Report generated successfully!")
+        print(f"HTML: {REPORT_FOLDER}/report.html")
+        print(f"JSON: {REPORT_FOLDER}/report.json")
+        print(f"PDF: {pdf_path}")
+    except ImportError as e:
+        print(f"PDF generation skipped: {e}")
+    except Exception as e:
+        print(f"PDF generation failed: {e}")
 
 
 # Generates a Json with the following information:

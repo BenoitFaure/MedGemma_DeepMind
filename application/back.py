@@ -36,17 +36,22 @@ You are expected to:
 3. Offer actionable insights to assist the doctor in making informed decisions about the patient's care.
 4. When necessary, fetch and summarize the latest research publications related to ARIAE to ensure the doctor has access to the most up-to-date information.
 
-Always maintain a professional and empathetic tone, ensuring your responses are tailored to the specific needs of the patient and the doctor."""
+Always maintain a professional and empathetic tone, ensuring your responses are tailored to the specific needs of the patient and the doctor.
+
+Format citations in MLA style, using the information from the RAG corpus.
+Use Markdown to format your responses.
+"""
 
 FIRST_USER_MESSAGE = """Here are the client data:
 - Client Name: {client_name}
 - Data: {json_data}
-Please reply to this message as if it was the first message the doctor sees.
 
 Please reply to this message as if it was the first message the doctor sees and with the following format:
 I’m your clinical radiology assistant, here to support you in caring for client {client_name} as they continue anti‑amyloid therapy for Alzheimer’s disease. 
 I have reviewed the most recent MRI sequences and accompanying reports, and I have real‑time access to the latest peer‑reviewed research on amyloid‑related imaging abnormalities (ARIA, including ARIA‑E).
 [You can include some more info here]
+
+DO NOT USE RAG TO RESPOND TO THIS FIRST MESSAGE
 """
 
 app = FastAPI(title="MedGemma API", description="Medical imaging and chat API")
