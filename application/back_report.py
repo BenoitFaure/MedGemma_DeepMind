@@ -380,21 +380,21 @@ def generate_client_report(client_name):
     seg_t0_slices = nb.load("./front/public/mri/0.seg/mri_file.nii").get_fdata()
     seg_t1_slices = nb.load("./front/public/mri/1.seg/mri_file.nii").get_fdata()
 
-    volume_t0 = compute_volume(seg_t0_slices)
-    volume_t1 = compute_volume(seg_t1_slices)
+    volume_t0 = float(compute_volume(seg_t0_slices))
+    volume_t1 = float(compute_volume(seg_t1_slices))
     volume_change = volume_t1 - volume_t0
-    biggest_diff_slice = find_biggest_difference_slice(seg_t0_slices, seg_t1_slices)
+    biggest_diff_slice = int(find_biggest_difference_slice(seg_t0_slices, seg_t1_slices))
     info["biggest_diff_slice"] = biggest_diff_slice
     info["volume_t0"] = volume_t0
     info["volume_t1"] = volume_t1
     info["volume_change"] = volume_change
-    info["oedemas_t0"] = compute_number_of_oedemas(seg_t0_slices)
-    info["oedemas_t1"] = compute_number_of_oedemas(seg_t1_slices)
-    info["max_diameter_t0"] = compute_max_diameter(seg_t0_slices)
-    info["max_diameter_t1"] = compute_max_diameter(seg_t1_slices)
+    info["oedemas_t0"] = float(compute_number_of_oedemas(seg_t0_slices))
+    info["oedemas_t1"] = float(compute_number_of_oedemas(seg_t1_slices))
+    info["max_diameter_t0"] = float(compute_max_diameter(seg_t0_slices))
+    info["max_diameter_t1"] = float(compute_max_diameter(seg_t1_slices))
 
     info["previous_volumes"] = {
-        "2025-02-27": volume_t0 - (volume_change / 2),
+        "2025-02-27": float(volume_t0 - (volume_change / 2)),
     }
 
     info["severity"], info["severity_reason"] = run_analysis(1)
@@ -404,21 +404,21 @@ def generate_client_report(client_name):
 def generate_html(info_json):
     out = REPORT_TEMPLATE.format(
         patient_name=info_json["client_name"],
-        referring_md="Dr. John Doe",
+        referring_md="Dr. Roger",
         age="65",
         patient_id="123456789",
         date_tp1=info_json["time1"],
         date_tp0=info_json["time0"],
         date_previous=list(info_json["previous_volumes"].keys())[0],
-        img_tp0=f"{MRI_FOLDER}/0.seg/slice_{info_json['biggest_diff_slice']:03d}.jpg",
-        img_tp1=f"{MRI_FOLDER}/1.seg/slice_{info_json['biggest_diff_slice']:03d}.jpg",
-        difference=f"{MRI_FOLDER}/difference/slice_{info_json['biggest_diff_slice']:03d}.jpg",
+        img_tp0=f"{MRI_FOLDER}/0.seg/slice_{str(info_json['biggest_diff_slice']).zfill(3)}.jpg",
+        img_tp1=f"{MRI_FOLDER}/1.seg/slice_{str(info_json['biggest_diff_slice']).zfill(3)}.jpg",
+        difference=f"{MRI_FOLDER}/difference/slice_{str(info_json['biggest_diff_slice']).zfill(3)}.jpg",
         diameter=info_json["max_diameter_t1"],
         diameter_change=info_json["max_diameter_t1"] - info_json["max_diameter_t0"],
         total_volume=info_json["volume_t1"],
         total_volume_change=info_json["volume_change"],
-        num_lesions_tp1=info_json["oedemas_t1"],
-        num_lesions_diff=info_json["oedemas_t1"] - info_json["oedemas_t0"],
+        num_lesions_tp1=int(info_json["oedemas_t1"]),
+        num_lesions_diff=int(info_json["oedemas_t1"] - info_json["oedemas_t0"]),
         radiographic_grading=info_json["severity"],
         previous_diameter=info_json["max_diameter_t0"],
         tp0_diameter=info_json["max_diameter_t0"],

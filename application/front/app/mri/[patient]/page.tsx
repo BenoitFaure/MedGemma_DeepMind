@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export default async function MRIViewer({ params }: { params: { patient: string } }) {
+export default function MRIViewer({ params }: { params: { patient: string } }) {
   const patientName = params.patient.replace("-", " ");
   const [currentSlice, setCurrentSlice] = useState(77); // Middle slice (154/2)
   const [showSegmentation, setShowSegmentation] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [showProgression, setShowProgression] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(true);
 
   const totalSlices = 154;
   const leftDate = "2025-03-24";
@@ -18,13 +19,20 @@ export default async function MRIViewer({ params }: { params: { patient: string 
     return slice.toString().padStart(3, '0');
   };
 
-  // Get image paths based on segmentation toggle
+  // Get image paths based on segmentation or progression toggle
   const getImagePaths = () => {
     const basePath = "/mri/";
-    const leftFolder = showSegmentation ? "0.seg" : "0";
-    const rightFolder = showSegmentation ? "1.seg" : "1";
+    let leftFolder = "0";
+    let rightFolder;
+    if (showProgression) {
+      rightFolder = "difference";
+    } else if (showSegmentation) {
+      leftFolder = "0.seg";
+      rightFolder = "1.seg";
+    } else {
+      rightFolder = "1";
+    }
     const sliceFile = `slice_${formatSliceNumber(currentSlice)}.jpg`;
-    
     return {
       left: `${basePath}${leftFolder}/${sliceFile}`,
       right: `${basePath}${rightFolder}/${sliceFile}`
@@ -39,16 +47,25 @@ export default async function MRIViewer({ params }: { params: { patient: string 
       const range = 5; // Preload 5 slices before and after
       for (let i = Math.max(0, currentSlice - range); i <= Math.min(totalSlices - 1, currentSlice + range); i++) {
         // Preload left image
+        let leftSrc = `/mri/0/slice_${formatSliceNumber(i)}.jpg`;
+        let rightSrc;
+        if (showProgression) {
+          rightSrc = `/mri/difference/slice_${formatSliceNumber(i)}.jpg`;
+        } else if (showSegmentation) {
+          leftSrc = `/mri/0.seg/slice_${formatSliceNumber(i)}.jpg`;
+          rightSrc = `/mri/1.seg/slice_${formatSliceNumber(i)}.jpg`;
+        } else {
+          rightSrc = `/mri/1/slice_${formatSliceNumber(i)}.jpg`;
+        }
         const leftImg = new Image();
-        leftImg.src = `/mri/${showSegmentation ? "0.seg" : "0"}/slice_${formatSliceNumber(i)}.jpg`;
-        // Preload right image
+        leftImg.src = leftSrc;
         const rightImg = new Image();
-        rightImg.src = `/mri/${showSegmentation ? "1.seg" : "1"}/slice_${formatSliceNumber(i)}.jpg`;
+        rightImg.src = rightSrc;
       }
     };
 
     preloadImages();
-  }, [currentSlice, showSegmentation]);
+  }, [currentSlice, showSegmentation, showProgression]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -73,7 +90,10 @@ export default async function MRIViewer({ params }: { params: { patient: string 
             <div className="flex items-center space-x-4">
               <span className="text-gray-700 font-medium">Slice: {currentSlice + 1} / {totalSlices}</span>
               <button
-                onClick={() => setShowSegmentation(!showSegmentation)}
+                onClick={() => {
+                  setShowSegmentation(!showSegmentation);
+                  if (!showSegmentation) setShowProgression(false);
+                }}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   showSegmentation
                     ? "bg-blue-600 text-white"
@@ -81,6 +101,19 @@ export default async function MRIViewer({ params }: { params: { patient: string 
                 }`}
               >
                 {showSegmentation ? "Hide Segmentation" : "Show Segmentation"}
+              </button>
+              <button
+                onClick={() => {
+                  setShowProgression(!showProgression);
+                  if (!showProgression) setShowSegmentation(false);
+                }}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  showProgression
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                {showProgression ? "Hide Progression" : "Show Progression"}
               </button>
             </div>
           </div>
@@ -140,7 +173,11 @@ export default async function MRIViewer({ params }: { params: { patient: string 
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-gray-800">{rightDate}</h3>
                 <p className="text-sm text-gray-600">
-                  {showSegmentation ? "With Segmentation" : "Original"}
+                  {showProgression
+                    ? "Progression"
+                    : showSegmentation
+                      ? "With Segmentation"
+                      : "Original"}
                 </p>
               </div>
               <div className="relative bg-gray-100 rounded-lg overflow-hidden" style={{ aspectRatio: "1/1" }}>
@@ -150,7 +187,7 @@ export default async function MRIViewer({ params }: { params: { patient: string 
                   className="w-full h-full object-contain"
                   onError={(e) => {
                     console.error("Failed to load right image:", imagePaths.right);
-                    (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzlDQTNBRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=";
+                    (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzlDQTNBRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=";
                   }}
                 />
               </div>
