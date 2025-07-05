@@ -11,5 +11,7 @@ dependencies = [
     "google-cloud-storage>=2.19.0",
     "nibabel>=5.3.2",
     "opencv-python>=4.11.0.86",
+    "scipy>=1.16.0",
     "uvicorn>=0.35.0",
+    "weasyprint>=65.1",
 ]

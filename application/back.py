@@ -5,6 +5,8 @@ from typing import List, Dict, Any
 import json
 import time
 import vertexai
+import os
+from back_report import generate_client_report, generate_html, save_html
 from vertexai.generative_models import GenerativeModel, Tool
 from vertexai import rag
 import asyncio
@@ -137,8 +139,36 @@ async def generate_report(request: ReportRequest):
     Output: status confirmation
     """
     client_name = request.client_name
-    # Simulate report generation time
-    await asyncio.sleep(1.5)
+    
+    # Check if the segmentation has been done
+    seg_file = f"./front/public/mri/0.seg/mri_file.nii"
+    if not os.path.exists(seg_file):
+        print("Starting segmentation process...")
+        
+        # Run segmentation for ID "0"
+        success_0 = run_segmentation("0")
+        if not success_0:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 0")
+        
+        # Run segmentation for ID "1"
+        success_1 = run_segmentation("1")
+        if not success_1:
+            raise HTTPException(status_code=500, detail="Segmentation failed for ID 1")
+        
+        # Extract files after segmentation
+        print("Starting file extraction...")
+        extract_success = extract_files()
+        if not extract_success:
+            raise HTTPException(status_code=500, detail="File extraction failed")
+        
+        print("Segmentation and extraction completed successfully!")
+
+    # Generate the report
+    print(f"Generating report for client: {client_name}")
+    info_json = generate_client_report(client_name)
+    html_content = generate_html(info_json)
+    save_html(html_content)
+
     return ReportResponse(
         response=f"Report generated for client: {client_name}"
     )
