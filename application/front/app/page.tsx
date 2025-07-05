@@ -83,7 +83,7 @@ export default function Home() {
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">ARIA Monitoring</h1>
+          <h1 className="text-4xl font-bold text-gray-800">GemmARIA</h1>
           <button 
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
             onClick={() => {}}

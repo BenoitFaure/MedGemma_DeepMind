@@ -225,7 +225,7 @@ async def start_chat(request: ChatStartRequest):
             role="user",
             content=FIRST_USER_MESSAGE.format(client_name=client_name, json_data=json_data)
         )
-        response = gemma_chat.send_message(initial_message.content, tools=[rag_tool])
+        response = gemma_chat.send_message(initial_message.content, tools=[])
 
         chat_history.append(ChatMessage(role="assistant", content=response.text))
     
@@ -253,6 +253,7 @@ async def send_chat_message(request: ChatSendRequest):
     response = gemma_chat.send_message(
         user_message.content, tools=[rag_tool]
     )
+    print(response)
     message = ChatMessage(role="assistant", content=response.text)
     chat_history.append(message)
 

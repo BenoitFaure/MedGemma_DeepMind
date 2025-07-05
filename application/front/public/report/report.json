@@ -1,0 +1,19 @@
+{
+    "client_name": "Bob",
+    "time0": "2025-03-24",
+    "time1": "2025-04-18",
+    "rmi_location": "frontal",
+    "biggest_diff_slice": 113,
+    "volume_t0": 5.61,
+    "volume_t1": 11.189200000000001,
+    "volume_change": 5.579200000000001,
+    "oedemas_t0": 10.0,
+    "oedemas_t1": 6.0,
+    "max_diameter_t0": 0.737563556583431,
+    "max_diameter_t1": 1.0507140429250956,
+    "previous_volumes": {
+        "2025-02-27": 2.8204
+    },
+    "severity": "MILD",
+    "severity_reason": "The report indicates 6 sites of involvement and a maximum lesion diameter of 1.1 cm. According to the grading criteria, more than 1 site of involvement where each lesion is less than 10 cm classifies the severity as MILD."
+}

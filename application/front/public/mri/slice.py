@@ -3,12 +3,12 @@ import numpy as np
 import os
 import nibabel as nib
 
-TO_SLICE = ["front/public/mri/0/", "front/public/mri/1/"]
+TO_SLICE = ["/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/0/", "/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/1/"]
 SEG = {
-    "front/public/mri/0.seg/": "front/public/mri/0/",
-    "front/public/mri/1.seg/": "front/public/mri/1/"
+    "/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/0.seg/": "/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/0/",
+    "/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/1.seg/": "/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/1/"
 }
-DIFFERENCE = "front/public/mri/difference/"
+DIFFERENCE = "/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/difference/"
 
 def extract_files():
     for slice_path in TO_SLICE:
@@ -48,14 +48,14 @@ def extract_files():
             cv2.imwrite(name, color_image)
 
     os.makedirs(DIFFERENCE, exist_ok=True)
-    seg_0 = nib.load(SEG["front/public/mri/0.seg/"] + "mri_file.nii").get_fdata()
-    seg_1 = nib.load(SEG["front/public/mri/1.seg/"] + "mri_file.nii").get_fdata()
+    seg_0 = nib.load(SEG["/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/0.seg/"] + "mri_file.nii").get_fdata()
+    seg_1 = nib.load(SEG["/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/1.seg/"] + "mri_file.nii").get_fdata()
 
     # Calculate the difference
     diff = np.abs(seg_1 - seg_0)
 
     # Load the original MRI data for 1
-    orig_data = nib.load("front/public/mri/1/mri_file.nii").get_fdata()
+    orig_data = nib.load("/home/mohamed/Documents/Mateo_GrinchJr/MedGemma_DeepMind/application/front/public/mri/1/mri_file.nii").get_fdata()
 
     for i in range(154):
         orig_slice = orig_data[i]
@@ -82,5 +82,6 @@ if __name__ == "__main__":
         extract_files()
     except Exception as e:
         print(f"Error during extraction: {e}")
+        raise e
     else:
         print("Extraction completed successfully.")
