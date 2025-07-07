@@ -150,13 +150,11 @@ yarn dev
 
 The frontend will be available at: `http://localhost:3000`
 
-## 🤝 Contributing
-
-We welcome contributions! Please read our `CONTRIBUTING.md` file for details on our code of conduct and the process for submitting pull requests.
-
 ## 📄 License
 
-This project is licensed under the MIT License - see the `LICENSE` file for details.
+MedGemma is governed by the [Health AI Developer Foundations terms of use](https://developers.google.com/health-ai-developer-foundations/terms).
+
+This integration is licensed under the Apache 2.0 License.
 
 ### 📋 Gemmaria Presentation
 
