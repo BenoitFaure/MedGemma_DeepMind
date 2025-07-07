@@ -160,7 +160,7 @@ This integration is licensed under the Apache 2.0 License.
 
 <embed src="PRESENTATION_GEMMARIA.pdf" type="application/pdf" width="100%" height="600px" />
 
-**Note:** If the PDF doesn't display in your browser, you can [download it directly](./PRESENTATION_GEMMARIA.pdf) or [view it in GitHub](https://github.com/your-username/your-repo/blob/main/PRESENTATION_GEMMARIA.pdf).
+**Note:** If the PDF doesn't display in your browser, you can [download it directly](./PRESENTATION_GEMMARIA.pdf) or [view it in GitHub](https://github.com/BenoitFaure/MedGemma_DeepMind/blob/main/PRESENTATION_GEMMARIA.pdf).
 
 🤗 IRM Finetuned Model on [HuggingFace](https://huggingface.co/axel-darmouni/medgemma-4b-it-sft-lora-brain-regions)
 
